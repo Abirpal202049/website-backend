@@ -1,5 +1,7 @@
 const corsConfig = {
-  // cors configuration
+  origin: "https://aec-coding-club.github.io",
+  credentials: true,
+  methods: ["GET", "POST"],
 };
 
 module.exports = corsConfig;

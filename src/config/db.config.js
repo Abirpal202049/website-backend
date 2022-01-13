@@ -1,5 +1,6 @@
 const dbConfig = {
-  // database configuration
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 };
 
 module.exports = dbConfig;
