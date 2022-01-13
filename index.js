@@ -12,10 +12,13 @@ const routes = require("./src/routes");
 const corsConfig = require("./src/config/cors.config");
 const dbConfig = require("./src/config/db.config");
 
+const generate = require("./src/utils/generate");
+
 const index = express();
 const server = createServer(index);
 
 config({ path: "./src/config/.env" });
+generate.secret();
 
 index.use(cookieParser());
 index.use(express.json());

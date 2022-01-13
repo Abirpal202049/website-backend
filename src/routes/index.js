@@ -1,9 +1,9 @@
 const { Router } = require("express");
 
+const admin = require("./admin");
+
 const routes = Router();
 
-routes.get("/", (req, res) => {
-  res.send("Root");
-});
+routes.use("/admin", admin);
 
 module.exports = routes;
