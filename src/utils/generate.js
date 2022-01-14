@@ -5,4 +5,4 @@ module.exports.secret = () => {
   process.env.secret = nanoid(256);
 };
 
-module.exports.token = () => jwt.sign({}, process.env.secret);
+module.exports.token = (payload = {}) => jwt.sign(payload, process.env.secret);
