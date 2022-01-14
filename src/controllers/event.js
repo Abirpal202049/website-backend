@@ -3,28 +3,29 @@ const Event = require('../models/Event')
 // Adding New Event 
 exports.addNewEvent = async (req, res) => {
     try {
-        const { eventImage, eventDetails, dateofEvent, eventTitle } = req.body;
+        const { image, title, description, date, form } = req.body;
 
-        if (!(eventImage && eventDetails && dateofEvent && eventTitle)) {
+        if (!(image && title && description && date && form)) {
             return res.status(400).json({
-                Message: "All fields are required"
+                message: "All fields are required"
             })
         }
         const event = await Event.create({
-            eventImage,
-            eventTitle,
-            eventDetails,
-            dateofEvent,
+            image,
+            title,
+            description,
+            date,
+            form
         })
 
         return res.status(200).json({
-            Message: "Success",
-            Event : event 
+            message: "Success",
+            event : event 
         })
  
     } catch (error) {
         return res.status(400).json({ 
-            Error: "Couldn't add Event Successfully" 
+            error: "Couldn't add Event Successfully" 
         })
     }
 
@@ -33,14 +34,14 @@ exports.addNewEvent = async (req, res) => {
 // Displaying all events
 exports.allEvent = async (req, res) => {
     try {
-        const allEvent = await Event.find({}, {eventImage : 1, eventTitle : 1, eventDetails : 1, _id : 1, dateofEvent : 1})
+        const allEvent = await Event.find({}, {image : 1, title : 1, description : 1, _id : 1, date : 1, form : 1})
         return res.status(200).json({
-            Message : 'Success',
-            Events : allEvent
+            message : 'Success',
+            events : allEvent
         })
     } catch (error) {
         return res.status(400).json({ 
-            Error: "Something Went Wrong" 
+            error: "Something Went Wrong" 
         })
     }
 }
@@ -58,20 +59,46 @@ exports.updateEvent = async (req, res) => {
 
         if(! (event)){
             return res.status(400).json({
-                Message: "Can't find any user like this",
+                message: "Can't find any user like this",
             })
         }
 
         return res.status(200).json({
-            Message: "Data Updated Successfully",
-            Event : event
+            message: "Data Updated Successfully",
+            event : event
         })
 
     } catch (error) {
         return res.status(400).json({ 
-            Error: "Something Went Wrong",
-            Message : error.message 
+            error: "Something Went Wrong",
+            message : error.message 
         })
     }
     
+}
+
+
+// Delete the specific event
+exports.deleteEvent = async (req, res) => {
+    try {
+        const eventid = req.params.eventId
+
+        const event = await Event.deleteOne({_id : eventid})
+
+        if (!event) {
+            return res.status(400).json({
+                message: "Data Can't be Deleted",
+            })
+        }
+
+        return res.status(200).json({
+            message : "Data Deleted Successfully",
+            event : event
+        })
+    } catch (error) {
+        return res.status(400).json({ 
+            error: "Something Went Wrong",
+            message : error.message 
+        })
+    }
 }

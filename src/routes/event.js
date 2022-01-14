@@ -1,16 +1,21 @@
 const express = require('express');
 const router = express.Router();
 
-const { addNewEvent, allEvent, updateEvent } = require('../controllers/event')
+const {admin} = require('../middlewares/authenticate');
+
+const { addNewEvent, allEvent, updateEvent, deleteEvent } = require('../controllers/event')
 
 // Crearte New Event
-router.post('/addevent', addNewEvent)
+router.post('/addevent', admin, addNewEvent)
 
 // Read All Events
-router.get('/allevents', allEvent)
+router.get('/allevents' , allEvent)
 
 // Update a Specific event based on its _id
-router.put('/update/:eventId', updateEvent)
+router.put('/update/:eventId', admin, updateEvent)
+
+// Delete a Specific event based on its _id
+router.delete('/delete/:eventId', admin, deleteEvent)
 
 
 module.exports = router
