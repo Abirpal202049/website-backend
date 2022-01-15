@@ -9,6 +9,9 @@ const router = Router();
 // Get All Events
 router.get("/", controller.getAll);
 
+// Get Specifit Event
+router.get("/:id", controller.get);
+
 // Create New Event
 router.post("/add", auth.admin, controller.add);
 

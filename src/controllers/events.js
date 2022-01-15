@@ -2,6 +2,19 @@ const eventdb = require("../models/events");
 
 const validator = require("../utils/validator");
 
+module.exports.get = async (req, res) => {
+  try {
+    const event = await eventdb.findById(
+      req.params.id,
+      "_id title description image form data"
+    );
+
+    res.status(200).json(event);
+  } catch (error) {
+    res.status(500).json({ error: "Cannot Find Event" });
+  }
+};
+
 // Get All Events
 module.exports.getAll = async (req, res) => {
   try {
