@@ -3,9 +3,9 @@ const { Router } = require("express");
 const admin = require("./admin");
 const event = require("./event");
 
-const routes = Router();
+const router = Router();
 
-routes.use("/admin", admin);
-routes.use("/event", event);
+router.use("/admin", admin);
+router.use("/event", event);
 
-module.exports = routes;
+module.exports = router;

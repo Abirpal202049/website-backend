@@ -2,10 +2,10 @@ const { Router } = require("express");
 
 const controller = require("../controllers/admin");
 
-const routes = Router();
+const router = Router();
 
-routes.post("/login", controller.login);
+router.post("/login", controller.login);
 
-routes.post("/logout", controller.logout);
+router.post("/logout", controller.logout);
 
-module.exports = routes;
+module.exports = router;
