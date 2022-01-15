@@ -1,11 +1,11 @@
 const { Router } = require("express");
 
 const admin = require("./admin");
-const event = require("./event");
+const events = require("./events");
 
 const router = Router();
 
 router.use("/admin", admin);
-router.use("/event", event);
+router.use("/events", events);
 
 module.exports = router;
