@@ -6,7 +6,7 @@ module.exports.get = async (req, res) => {
   try {
     const event = await eventdb.findById(
       req.params.id,
-      "_id title description image form data"
+      "_id title description image form date"
     );
 
     res.status(200).json(event);
@@ -20,7 +20,7 @@ module.exports.getAll = async (req, res) => {
   try {
     const events = await eventdb.find(
       {},
-      "_id title description image form data"
+      "_id title description image form date"
     );
 
     res.status(200).json({ events, length: events.length });
@@ -37,7 +37,14 @@ module.exports.add = async (req, res) => {
 
     const newEvent = await eventdb.create(req.body.event);
 
-    res.status(200).json({ event: newEvent });
+    res.status(200).json({
+      _id: newEvent._id,
+      title: newEvent.title,
+      description: newEvent.description,
+      image: newEvent.image,
+      form: newEvent.form,
+      date: newEvent.date,
+    });
   } catch (error) {
     res.status(500).json({ error: "Cannot Create Event" });
   }
@@ -55,7 +62,14 @@ module.exports.update = async (req, res) => {
     if (!updatedEvent)
       return res.status(404).json({ message: "Cannot Find Event" });
 
-    res.status(200).json({ event: updatedEvent });
+    res.status(200).json({
+      _id: updatedEvent._id,
+      title: updatedEvent.title,
+      description: updatedEvent.description,
+      image: updatedEvent.image,
+      form: updatedEvent.form,
+      date: updatedEvent.date,
+    });
   } catch (error) {
     res.status(500).json({ error: "Cannot Update Event" });
   }
@@ -69,7 +83,14 @@ module.exports.delete = async (req, res) => {
     if (!deletedEvent)
       return res.status(404).json({ message: "Cannot Find Event" });
 
-    res.status(200).json({ event: deletedEvent });
+    res.status(200).json({
+      _id: deletedEvent._id,
+      title: deletedEvent.title,
+      description: deletedEvent.description,
+      image: deletedEvent.image,
+      form: deletedEvent.form,
+      date: deletedEvent.date,
+    });
   } catch (error) {
     res.status(500).json({ error: "Cannot Delete Event" });
   }
