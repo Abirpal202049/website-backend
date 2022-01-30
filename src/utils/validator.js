@@ -1,6 +1,14 @@
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 
+const verify = (token, secret) => {
+  try {
+    return jwt.verify(token, secret);
+  } catch {
+    return null;
+  }
+};
+
 module.exports.event = (event) =>
   Joi.object({
     title: Joi.string().required(),
@@ -10,11 +18,5 @@ module.exports.event = (event) =>
     date: Joi.date().required(),
   }).validate(event);
 
-module.exports.jwt = (token) => {
-  try {
-    jwt.verify(token, process.env.secret);
-    return true;
-  } catch {
-    return false;
-  }
-};
+module.exports.serverToken = (token) => verify(token, process.env.serverToken);
+module.exports.clientToken = (token) => verify(token, process.env.clientToken);

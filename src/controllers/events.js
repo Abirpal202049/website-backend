@@ -9,6 +9,8 @@ module.exports.get = async (req, res) => {
       "_id title description image form date"
     );
 
+    if (!event) return res.status(404).json({ error: "No Events Found" });
+
     res.status(200).json(event);
   } catch (error) {
     res.status(500).json({ error: "Cannot Find Event" });
@@ -32,10 +34,10 @@ module.exports.getAll = async (req, res) => {
 // Create New Event
 module.exports.add = async (req, res) => {
   try {
-    const { error } = validator.event(req.body.event);
+    const { error } = validator.event(req.body);
     if (error) return res.status(406).json({ error: "Invalid Event Data" });
 
-    const newEvent = await eventdb.create(req.body.event);
+    const newEvent = await eventdb.create(req.body);
 
     res.status(200).json({
       _id: newEvent._id,
@@ -53,9 +55,12 @@ module.exports.add = async (req, res) => {
 // Update Specific Event Based On It's ID
 module.exports.update = async (req, res) => {
   try {
+    const { error } = validator.event(req.body);
+    if (error) return res.status(406).json({ error: "Invalid Event Data" });
+
     const updatedEvent = await eventdb.findByIdAndUpdate(
       req.params.id,
-      req.body.event,
+      req.body,
       { new: true, runValidators: true }
     );
 

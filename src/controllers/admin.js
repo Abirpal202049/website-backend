@@ -2,25 +2,33 @@ const cookie = require("../utils/cookie");
 const generate = require("../utils/generate");
 const validator = require("../utils/validator");
 
-module.exports.login = (req, res) => {
-  const token = req.cookies["admin-token"];
+const getToken = (auth) =>
+  auth && auth.split(" ")[0] === "Bearer" && auth.split(" ")[1];
 
-  if (token && validator.jwt(token))
+module.exports.login = (req, res) => {
+  const clientToken = getToken(req.headers.authorization);
+  const serverToken = req.cookies["admin-token"];
+
+  if (validator.serverToken(serverToken) && validator.clientToken(clientToken))
     return res.status(405).json({ error: "Already Logged In" });
 
   if (req.body.passcode === process.env.adminPass)
     return res
-      .cookie("admin-token", generate.token(), cookie.options())
-      .sendStatus(200);
+      .status(200)
+      .cookie("admin-token", generate.serverToken(), cookie.options())
+      .json({ accessToken: generate.clientToken() });
 
-  res.sendStatus(406);
+  res.status(406).json({ error: "Authntication Failed" });
 };
 
 module.exports.logout = (req, res) => {
-  const token = req.cookies["admin-token"];
+  const clientToken = getToken(req.headers.authorization);
+  const serverToken = req.cookies["admin-token"];
 
   res.clearCookie("admin-token", cookie.options(0));
 
-  if (token && validator.jwt(token)) res.sendStatus(200);
-  else res.sendStatus(405);
+  if (validator.serverToken(serverToken) && validator.clientToken(clientToken))
+    return res.status(200).json({ message: "Logged Out Successfully" });
+
+  res.status(405).json({ error: "Already Logged Out" });
 };
